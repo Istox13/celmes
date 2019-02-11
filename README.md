@@ -1,2 +1,2 @@
-cd games
+cd games;
 python tetris.py
