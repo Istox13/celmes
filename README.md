@@ -1,2 +1,1 @@
-cd games;
-python tetris.py
+# celmes
