@@ -1,7 +1,9 @@
 import pygame
 
 class Tetris_board:
-    def __init__(self, screen, color_key=0, height=20, width=10, left=10, cell_size=30, top=10):
+    def __init__(self, screen, color_key=0, height=20, width=10, left=10, cell_size=30, top=10, 
+                zaliv=True):
+        self.zaliv = zaliv
         self.width = width
         self.height = height
         self.board = [[0] * width for _ in range(height)]
@@ -32,7 +34,8 @@ class Tetris_board:
         self.board[y][x] = value
 
     def render(self):
-        self.screen.fill((158, 173, 134))
+        if self.zaliv:
+            self.screen.fill((158, 173, 134))
         n = 4
         for i in range(self.height):
             for j in range(self.width):

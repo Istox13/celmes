@@ -3,16 +3,18 @@ import random
 from data import figure
 import pygame
 
+
 class Tetris:
     def __init__(self, screen):
         self.status = ''
         self.game = True
         self.score = 0
-        self.lvl = self.score // 10
+        self.lvl = 1
         width_tetris, height_tetris = 20, 10
         self.t_figure, self.t_figure_code = self.get_figure()
         self.new_figure, self.new_figure_code = self.get_figure()
         self.screen = screen
+        self.next = Tetris_board(self.screen, 0, 4, 4, 400, 30, 150, zaliv=False)
         self.board = Tetris_board(screen, 0, width_tetris, height_tetris) 
         self.print_in(self.t_figure, self.board)
 
@@ -27,7 +29,7 @@ class Tetris:
 
     def game_over(self, board):
         self.game = False
-        self.status = 'Game Ower'
+        self.status = 'GAME OVER'
 
 
     def print_in(self, coords, board): 
@@ -49,6 +51,7 @@ class Tetris:
                 ms.pop(n)
                 ms = [[0 for _ in range(board.width)]] + ms
                 self.score += 1
+                self.lvl = self.score // 10 + 1
                 red = True
 
         if red:
@@ -57,9 +60,12 @@ class Tetris:
         self.t_figure, self.t_figure_code = self.new_figure, self.new_figure_code
         self.new_figure, self.new_figure_code = self.get_figure()
         self.print_in(self.t_figure, self.board)
+        self.next.set_board(self.new_figure_code[0][0])
 
     def render(self):
         self.board.render()
+        self.next.render()
+        self.next.set_board(self.new_figure_code[0][0])
 
     def down(self, coords, board):
         for x, y in coords:
