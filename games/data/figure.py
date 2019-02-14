@@ -1,6 +1,12 @@
 def coords_init(figure, key, x=5, y=0):
     t_s = 0
+    l_s = 0
     coords = list()
+    for i in range(len(figure[key][0])):
+        if sum([figure[key][j][i] for j in range(len(figure[key]))]) == 0:
+            l_s += 1
+            continue
+        
 
     for i, row in enumerate(figure[key]):
         if sum(row) == 0:
@@ -10,7 +16,7 @@ def coords_init(figure, key, x=5, y=0):
 
         for j, n in enumerate(row):
             if n == 1:
-                coords.append((x + j, y + i - t_s))
+                coords.append((x + j - l_s, y + i - t_s))
 
     return coords, (figure, key)
 
