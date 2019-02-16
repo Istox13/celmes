@@ -1,5 +1,5 @@
 import pygame
-from boards.tetris_board import Tetris_board
+from boards.olds_board import gBoard
 import random
 from data import figure
 import time

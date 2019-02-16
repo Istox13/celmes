@@ -1,4 +1,4 @@
-from boards.tetris_board import Tetris_board
+from boards.olds_board import gBoard
 import random
 from data import figure
 import pygame
@@ -18,8 +18,8 @@ class Tetris:
         self.t_figure, self.t_figure_code = self.get_figure()
         self.new_figure, self.new_figure_code = self.get_figure()
         self.screen = screen
-        self.next = Tetris_board(self.screen, 0, 4, 4, 400, 30, 150, zaliv=False)
-        self.board = Tetris_board(screen, 0, width_tetris, height_tetris) 
+        self.next = gBoard(self.screen, 0, 4, 4, 400, 30, 150, zaliv=False)
+        self.board = gBoard(screen, 0, width_tetris, height_tetris) 
         self.print_in(self.t_figure, self.board)
 
     
@@ -123,7 +123,7 @@ class Tetris:
 
     def render(self):
         self.board.render()
-        self.next.render()
+        self.next.render(0)
         self.next.set_board(self.new_figure_code[0][0])
 
     def down(self, coords, board):
