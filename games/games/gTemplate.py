@@ -16,3 +16,6 @@ class Template:
     
     def render(self):
         f'''Вызывается через {self.speed} секунд при self.game == True'''
+        
+    def action(self):
+        pass
