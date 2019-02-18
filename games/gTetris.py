@@ -13,6 +13,8 @@ class Tetris:
         self.lvl = 1
         self.print_next = True
         self.init_sound()
+        self.font = pygame.font.Font(None, 50)
+        self.font2 = pygame.font.Font(None, 140)
 
         width_tetris, height_tetris = 20, 10
         self.t_figure, self.t_figure_code = self.get_figure()
@@ -21,8 +23,10 @@ class Tetris:
         self.next = gBoard(self.screen, 0, 4, 4, 400, 30, 150, zaliv=False)
         self.board = gBoard(screen, 0, width_tetris, height_tetris) 
         self.print_in(self.t_figure, self.board)
-
     
+    def get_size(self):
+        return (600, 610) 
+
     def close(self):
         pygame.mixer.music.stop()
 
@@ -54,6 +58,32 @@ class Tetris:
 
     def get_status(self):
         return self.game
+
+    def print_information(self):
+        width, height = self.screen.get_size()
+
+        text = self.font.render(f'Score: {self.score}', 1, (0, 0, 0))
+        text_x = 3 * width // 4 - text.get_width() // 2
+        text_y = 0.7 * height  - text.get_height() // 2
+        self.screen.blit(text, (text_x, text_y))
+
+        text = self.font.render(f'Level: {self.lvl}', 1, (0, 0, 0))
+        text_x = 3 * width // 4 - text.get_width() // 2
+        text_y = 6 * height // 7 - text.get_height() // 2
+        self.screen.blit(text, (text_x, text_y))
+
+        if self.print_next:
+            text = self.font.render('Next', 1, (0, 0, 0))
+            text_x = 3 * width // 4 - text.get_width() // 2
+            text_y = height // 5 - text.get_height() // 2
+            self.screen.blit(text, (text_x, text_y))
+
+        if self.status:
+            self.screen.fill((158, 173, 134))
+            text = self.font2.render(f'{self.status}', 1, (0, 0, 0))
+            text_x =  width // 2 - text.get_width() // 2
+            text_y =  height // 2 - text.get_height() // 2
+            self.screen.blit(text, (text_x, text_y))
 
     def action(self, keys):
         if keys[pygame.K_DOWN]:
@@ -92,7 +122,6 @@ class Tetris:
             for x, y in coords:
                 board.set_value(x, y, 1)
 
-
     def new_round(self, board):
         ms = board.get_board()
         red = False
@@ -115,7 +144,8 @@ class Tetris:
         if red:
             board.set_board(ms)
             self.sound_delit.play()
-
+        
+        
         self.t_figure, self.t_figure_code = self.new_figure, self.new_figure_code
         self.new_figure, self.new_figure_code = self.get_figure()
         self.print_in(self.t_figure, self.board)
@@ -125,6 +155,7 @@ class Tetris:
         self.board.render()
         self.next.render(0)
         self.next.set_board(self.new_figure_code[0][0])
+        self.print_information()
 
     def down(self, coords, board):
         for x, y in coords:
