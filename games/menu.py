@@ -1,80 +1,95 @@
-import pygame, sys
-pygame.init()
-class Sprite:
-    def __init__(self, xpos, ypos, filename): 
-        self.x = xpos
-        self.y = ypos
-        self.bitmap = pygame.image.load(filename)
-        self.bitmap.set_colorkey((0,0,0)) 
-    def render(self, screen):
-        screen.blit(self.bitmap,(self.x,self.y))
- 
+import pygame
+import time
+
+games = ['Tetris', 'Snake', 'Race']
+
+for name in games:
+    exec(f'from g{name} import {name}')
+
 class Menu:
-    
-    def __init__(self):
-        self.punkts = [(265, 300, u'Help', (11, 0, 77)),
-          (265, 340, 'Exit', (11, 0, 77)),
-          (230, 150, u'CELMES', (255, 0, 0))]
-        pygame.font.init()
-        self.window = pygame.display.set_mode((610, 460))
-        pygame.display.set_caption('CELMES')
-        self.screen = pygame.Surface((610, 640))
-    def render(self, screen, font):
-        for i in self.punkts:
-            self.screen.blit(font.render(i[2], 1, i[3]), (i[0], i[1]))
-    def menu(self):
-        pygame.display.set_caption('CELMES')
-        done = True
-        font_menu = pygame.font.Font(None, 50)
-        punkt = 0
-        tetr = Sprite(10, 10, 'data/tetris.png')
-        snake = Sprite(10, 250, 'data/snake.png')
-        maze = Sprite(400, 10, 'data/maze.png')
-        cars = Sprite(400, 250, 'data/highway.png')
-        while done:
-            self.screen.fill((0, 100, 200))
-            tetr.render(self.screen)
-            snake.render(self.screen)
-            maze.render(self.screen)
-            cars.render(self.screen)
-            self.render(self.screen, font_menu)
-            for e in pygame.event.get():
-                if e.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
-                    if 210 > e.pos[0] > 10 and 210 > e.pos[1] > 10:
-                        print(1)
-                    if 210 > e.pos[0] > 10 and 450 > e.pos[1] > 250:
-                        print(2)
-                    if 315 > e.pos[0] > 265 and 350 > e.pos[1] > 300:
-                        self.helpwindow()
-                    if 315 > e.pos[0] > 265 and 400 > e.pos[1] > 350:
-                        pygame.quit()
-                        sys.exit()
-                    if 600 > e.pos[0] > 400 and 210 > e.pos[1] > 10:
-                        print(3)
-                    if 600 > e.pos[0] > 400 and 450 > e.pos[1] > 250:
-                        print(4)
-            self.window.blit(self.screen, (0, 0))
-            pygame.display.flip()
+    def __init__(self, screen, games):
+        self.screen = screen
+        self.games = games
+        self.t_pos = 1
+        self.speed = 1
+        self.game = True
+        self.size = self.width, self.height = 1200, 800
 
-    def helpwindow(self):
-        helpw = pygame.Surface((610, 460))
-        pygame.display.set_caption('CELMES: HELP')
-        helpw.fill((255, 255, 255))
-        font = pygame.font.Font(None, 70)
-        helpw.blit(font.render('Правила', 1, (0, 0, 0)), (200, 10))
-        self.window.blit(helpw, (0, 0))
-        pygame.display.update()
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.menu()
-                    break
+    def motion(self):
+        pass
+
+    def render(self):
+        def get_gms(t_pos):
+            games_3 = self.games * 3
+            t_pos += len(self.games)
+            return games_3[t_pos - 1:t_pos + 2]
+
+        prop = (self.height - 441) // 8
+        widths = list()
         
+        for n, name in enumerate(get_gms(self.t_pos)):
 
-if __name__ == '__main__':
-    game = Menu()
-    game.menu()
-    pygame.quit()
+            font = pygame.font.Font(None, 170 if n != 1 else 300)
+            text = font.render(name, 1, (0, 0, 0))
+            text_x = 0
+            text_y = (2 + n) * prop + sum([0, 117 + prop, 207 + prop][:n + 1]) * (n > 0)
+            widths.append(text.get_width())
+            self.screen.blit(text, (text_x, text_y))
+        
+        pygame.draw.line(self.screen, (0, 0, 0), (700, 0), (700, self.height), 1)
+
+    def action(self, keys):
+        if keys[pygame.K_DOWN]:
+            self.t_pos = (self.t_pos + 1) % len(self.games)
+            self.render()
+            time.sleep(0.3)
+        
+        if keys[pygame.K_UP]:
+            self.t_pos = (self.t_pos - 1) % len(self.games)
+            self.render()
+            time.sleep(0.3)
+        
+        if keys[pygame.K_KP_ENTER]:
+            time.sleep(0.3)
+            return self.games[self.t_pos]
+
+
+
+
+pygame.init()
+size = width, height = 600, 610
+color = (0, 0, 0)
+screen = pygame.display.set_mode(size)
+running = True
+old_time = time.time()
+t_game = Menu(screen, ['Tetris', 'Snake', 'Race'])
+screen = pygame.display.set_mode(t_game.size)
+
+while running:
+    screen.fill((158, 173, 134))
+    for event in pygame.event.get():
+
+        if event.type == pygame.QUIT:
+            running = False
+        if t_game.game:
+            name = t_game.action(pygame.key.get_pressed())
+
+    if t_game.game and time.time() - old_time > t_game.speed:
+        old_time = time.time()
+        t_game.motion()
+
+    t_game.render()
+
+    if name:
+        exec(f'size_game = {name}.size')
+        screen = pygame.display.set_mode(size_game)
+        exec(f't_game = {name}(screen)')
+
+    t_game.render()
+    pygame.display.flip()
+
+
+pygame.quit()
+
+
+pygame.quit()

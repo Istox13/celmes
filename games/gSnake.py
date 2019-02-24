@@ -4,6 +4,7 @@ import random
 
 class Snake:
 
+    size = (700, 700) 
     def __init__(self, screen):
         self.status = ''
         self.game = True
@@ -14,7 +15,7 @@ class Snake:
         self.napr = (1, 0)
         self.init_sound()
 
-        self.board = gBoard(self.screen, 0, 30, 30)
+        self.board = gBoard(self.screen, 0, 23, 23)
         self.snake = [(i, self.board.height - 1) for i in range(5)]
         self.new_point()
         
@@ -116,25 +117,20 @@ class Snake:
         self.board.render()
         self.c_status()
     
-
-    def get_size(self):
-        return (910, 910) 
-
-    
     def action(self, keys):
-        if keys[pygame.K_DOWN] and self.napr != (0, -1):
+        if keys[pygame.K_DOWN] and self.napr not in [(0, -1), (0, 1)]:
             self.napr = (0, 1)
             self.motion()
         
-        if keys[pygame.K_RIGHT] and self.napr != (-1, 0):
+        if keys[pygame.K_RIGHT] and self.napr not in [(-1, 0), (1, 0)]:
             self.napr = (1, 0)
             self.motion()
 
-        if keys[pygame.K_LEFT] and self.napr != (1, 0):
+        if keys[pygame.K_LEFT] and self.napr not in [(1, 0), (-1, 0)]:
             self.napr = (-1, 0)
             self.motion()
         
-        if keys[pygame.K_UP] and self.napr != (0, 1):
+        if keys[pygame.K_UP] and self.napr not in [(0, 1), (0, -1)]:
             self.napr = (0, -1)
             self.motion()
         

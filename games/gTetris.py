@@ -5,6 +5,8 @@ import pygame
 
 
 class Tetris:
+
+    size = (600, 610) 
     def __init__(self, screen):
         self.status = ''
         self.game = True
@@ -24,8 +26,6 @@ class Tetris:
         self.board = gBoard(screen, 0, width_tetris, height_tetris) 
         self.print_in(self.t_figure, self.board)
     
-    def get_size(self):
-        return (600, 610) 
 
     def close(self):
         pygame.mixer.music.stop()

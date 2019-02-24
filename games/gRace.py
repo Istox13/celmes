@@ -1,10 +1,12 @@
-from boards.tetris_board import Tetris_board
+from boards.olds_board import gBoard
 import random
 import pygame
 import time
 
 
 class Race:
+    size = (600, 610)
+
     def __init__(self, screen):
         self.status = ''
         self.game = True
@@ -14,24 +16,29 @@ class Race:
         self.print_next = True
         #self.init_sound()
         self.coords = [[4, 16], [3, 17], [4, 17], [5, 17], [4, 18], [3, 19], [5, 19]]
-        width_tetris, height_tetris = 20, 10
         self.screen = screen
-        self.board = Tetris_board(screen, 0, width_tetris, height_tetris)
+        self.board = gBoard(screen)
+
         for i in range(0, 20, 2):
             self.board.set_value(0, i, 1)
             self.board.set_value(9, i, 1)
+
         for i in self.coords:
             self.board.set_value(i[0], i[1], 1)
+
         self.k = 0
         self.cars = []
         
         
     def motion(self):
         self.k += 1
+
         if self.k == 8:
             self.create_car()
             self.k = 0
+            
         self.rdown()
+
         for i in range(20):
             self.board.set_value(0, i,
                                  abs(self.board.get_value(0, i) - 1))
@@ -63,7 +70,6 @@ class Race:
 
     def render(self):
         self.check()
-        f'''Вызывается через {self.speed} секунд при self.game == True'''
         self.board.render()
         
         
