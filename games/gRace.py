@@ -11,13 +11,16 @@ class Race:
         self.status = ''
         self.game = True
         self.speed = 1
+        self.old_speed = 1
         self.score = 0
         self.lvl = 1
-        self.print_next = True
+        self.print_next = False
         #self.init_sound()
         self.coords = [[4, 16], [3, 17], [4, 17], [5, 17], [4, 18], [3, 19], [5, 19]]
         self.screen = screen
         self.board = gBoard(screen)
+        self.font = pygame.font.Font(None, 50)
+        self.font2 = pygame.font.Font(None, 140)
 
         for i in range(0, 20, 2):
             self.board.set_value(0, i, 1)
@@ -28,7 +31,32 @@ class Race:
 
         self.k = 0
         self.cars = []
-        
+    
+    def print_information(self):
+        width, height = self.screen.get_size()
+
+        text = self.font.render(f'Score: {self.score}', 1, (0, 0, 0))
+        text_x = 3 * width // 4 - text.get_width() // 2
+        text_y = 0.7 * height  - text.get_height() // 2
+        self.screen.blit(text, (text_x, text_y))
+
+        text = self.font.render(f'Level: {self.lvl}', 1, (0, 0, 0))
+        text_x = 3 * width // 4 - text.get_width() // 2
+        text_y = 6 * height // 7 - text.get_height() // 2
+        self.screen.blit(text, (text_x, text_y))
+
+        if self.print_next:
+            text = self.font.render('Next', 1, (0, 0, 0))
+            text_x = 3 * width // 4 - text.get_width() // 2
+            text_y = height // 5 - text.get_height() // 2
+            self.screen.blit(text, (text_x, text_y))
+
+        if self.status:
+            self.screen.fill((158, 173, 134))
+            text = self.font2.render(f'{self.status}', 1, (0, 0, 0))
+            text_x =  width // 2 - text.get_width() // 2
+            text_y =  height // 2 - text.get_height() // 2
+            self.screen.blit(text, (text_x, text_y))
         
     def motion(self):
         self.k += 1
@@ -71,6 +99,7 @@ class Race:
     def render(self):
         self.check()
         self.board.render()
+        self.print_information()
         
         
     def action(self, keys):
@@ -78,10 +107,11 @@ class Race:
             self.right()
         if keys[pygame.K_LEFT]:
             self.left()
-        if keys[pygame.K_SPACE]:
-            self.boost(True)
+        if keys[pygame.K_SPACE] and 0.3 < self.speed:
+            self.old_speed = self.speed
+            self.speed = 0.3
         else:
-            self.boost(False)
+            self.speed = self.old_speed
 
 
     def left(self):
@@ -102,13 +132,6 @@ class Race:
                 i[0] += 1
             for i in self.coords:
                 self.board.set_value(i[0], i[1], 1)
-
-
-    def boost(self, val):
-        if val:
-            self.speed -= 0.1
-        else:
-            self.speed += 0.1
 
 
     def rdown(self):

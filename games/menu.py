@@ -49,7 +49,7 @@ class Menu:
             self.render()
             time.sleep(0.3)
         
-        if keys[pygame.K_KP_ENTER]:
+        if keys[pygame.K_RETURN]:
             time.sleep(0.3)
             return self.games[self.t_pos]
 
