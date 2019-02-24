@@ -15,7 +15,7 @@ class Race:
         self.score = 0
         self.lvl = 1
         self.print_next = False
-        #self.init_sound()
+        self.init_sound()
         self.coords = [[4, 16], [3, 17], [4, 17], [5, 17], [4, 18], [3, 19], [5, 19]]
         self.screen = screen
         self.board = gBoard(screen)
@@ -31,6 +31,10 @@ class Race:
 
         self.k = 0
         self.cars = []
+
+    def init_sound(self):
+        self.sound_move = pygame.mixer.Sound('data/sounds/g_tetris_move.wav')
+        self.sound_delit = pygame.mixer.Sound('data/sounds/g_tetris_delit.wav')
     
     def print_information(self):
         width, height = self.screen.get_size()
@@ -72,6 +76,8 @@ class Race:
                                  abs(self.board.get_value(0, i) - 1))
             self.board.set_value(9, i,
                                  abs(self.board.get_value(9, i) - 1))
+
+        self.sound_move.play()
 
 
     def create_car(self):
@@ -160,6 +166,8 @@ class Race:
 
 
     def game_over(self, board):
+        if self.game:
+            self.sound_delit.play()
         self.game = False
         self.status = 'GAME OVER'
                 
