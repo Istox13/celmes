@@ -47,6 +47,7 @@ while running:
         name = ''
 
     t_game.render()
+    
     pause.render()
     pygame.display.flip()
 
