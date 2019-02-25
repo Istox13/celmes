@@ -82,11 +82,17 @@ class Menu:
         self.t_pos = 1
         self.speed = 1
         self.game = True
+        self.logo = pygame.image.load('data/logo.png')
+        screen.fill((255, 255, 255))
+        screen.blit(self.logo, (-50, 70))
+        pygame.display.flip()
+        time.sleep(3)
         pygame.mixer.music.set_volume(0)
         self.init_sound()
         font = pygame.font.Font(None, 300)
         max_w = max([font.render(name, 1, (0, 0, 0)).get_width() for name in self.games])
         self.size = self.width, self.height = max_w + 40, 800
+    
 
     def init_sound(self):
         self.sound_enter = pygame.mixer.Sound('data/sounds/g_tetris_drop.wav')
@@ -96,6 +102,7 @@ class Menu:
         pass
 
     def render(self):
+         
         def get_gms(t_pos):
             games_3 = self.games * 3
             t_pos += len(self.games)
@@ -112,6 +119,7 @@ class Menu:
             text_y = (2 + n) * prop + sum([0, 117 + prop, 207 + prop][:n + 1]) * (n > 0)
             widths.append(text.get_width())
             self.screen.blit(text, (text_x, text_y))
+            
         
         pygame.draw.line(self.screen, (0, 0, 0), (700, 0), (700, self.height), 1)
 
