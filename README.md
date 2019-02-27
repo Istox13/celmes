@@ -9,4 +9,4 @@
 
 Чтобы поставить игру на паузу, нужно нажать клавишу "esc". Чтобы передвигаться по меню паузы используйте стрелки "вверх" и "вниз" и "enter" для выбора.
 
-[logo](https://github.com/Istox13/celmes/blob/master/games/data/logo.png?raw=true)
+![logo](https://github.com/Istox13/celmes/blob/master/games/data/logo.png?raw=true)
