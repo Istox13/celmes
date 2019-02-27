@@ -1,8 +1,9 @@
 ![logo](https://github.com/Istox13/celmes/blob/master/games/data/logo.png?raw=true)
+
 В Selmes доступны 3 игры:
- * Тетрис
+  * Тетрис
   * Змейка
-   * Гонки. 
+  * Гонки. 
    
 Чтобы выбрать игру используйте стрелки "вверх" и "вниз" и "enter".
 
