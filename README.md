@@ -1,5 +1,5 @@
 ![logo](https://github.com/Istox13/celmes/blob/master/games/data/logo.png?raw=true)
-* В Selmes доступны 3 игры:
+В Selmes доступны 3 игры:
  * Тетрис
   * Змейка
    * Гонки. 
